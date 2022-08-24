@@ -29,7 +29,7 @@ class Server {
     }
 
     routes() {
-        this.app.use(this.gatewayRoute, require('../routes/gateway.routes'));
+        // this.app.use(this.gatewayRoute, require('../routes/gateway.routes'));
         this.app.use(this.gatewayRoute, require('../routes/peripheral.routes'));
     }
 
