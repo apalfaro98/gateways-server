@@ -1,12 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 class Server {
     constructor() {
         this.app = express();
         this.PORT = process.env.PORT;
         this.gatewayRoute = '/api/gateways'
-        this.peripheralRoute = '/api/peripherals'
 
         //Middlewares
         this.middlewares();
@@ -25,12 +25,11 @@ class Server {
         this.app.use(express.json());
 
         //Public directory
-        this.app.use(express.static('public'));
+        this.app.use(express.static(path.resolve(__dirname, '../public')));
     }
 
     routes() {
-        // this.app.use(this.gatewayRoute, require('../routes/gateway.routes'));
-        this.app.use(this.gatewayRoute, require('../routes/peripheral.routes'));
+        this.app.use(this.gatewayRoute, require('../routes/gateway.routes'));
     }
 
     listen() {
