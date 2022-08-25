@@ -13,6 +13,10 @@ const peripheralSchema = Schema({
         type: String,
         default: 'offline',
         enum: ['online', 'offline']
+    },
+    gateway: {
+        type: Schema.Types.ObjectId,
+        ref: 'Gateway'
     }
 });
 
