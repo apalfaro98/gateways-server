@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const gatewayController = require('../controllers/gateway.controllers');
+const gatewayController = require('../controllers/gateway.controller');
 
-router.get('/', gatewayController)
-      .get('/:gatewayID', gatewayController)
-      .post('/', gatewayController)
-      .post('/:gatewayID/peripherals', gatewayController)
-      .delete('/:gatewayID/peripherals/:peripheralID', gatewayController);
+router.get('/', gatewayController.getAll)
+      .get('/:gatewayID', gatewayController.getOne)
+      .post('/', gatewayController.create)
+      .post('/:gatewayID/peripherals', gatewayController.addPeripheral)
+      .delete('/:gatewayID/peripherals/:peripheralID', gatewayController.deletePeripheral);
 
 module.exports = router;
