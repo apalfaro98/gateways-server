@@ -1,5 +1,5 @@
 
-const gatewayController = {
+const gatewayController = () => {
     
 }
 
