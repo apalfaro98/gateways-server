@@ -12,6 +12,8 @@ const gatewayController = {
 		});
 	},
 	create: (req = request, res = response) => {
+		const { serial, name, address, peripherals } = req.body;
+
 		res.status(201).json({
 			msg: 'Create gateway',
 		});

@@ -1,10 +1,11 @@
 const router = require('express').Router();
 const { check } = require('express-validator');
 const gatewayController = require('../controllers/gateway.controller');
+const { validateFields } = require('../middlewares/validate-fields.middleware');
 const {
-	validateFields,
 	validatePeripherals,
-} = require('../middlewares/validate.middleware');
+	checkIfSerialExists,
+} = require('../helpers/validators');
 
 router
 	.get('/', gatewayController.getAll)
@@ -13,6 +14,7 @@ router
 		'/',
 		[
 			check('serial', 'The serial number is required').not().isEmpty(),
+			check('serial').custom(checkIfSerialExists),
 			check('name', 'The name is required').not().isEmpty(),
 			check('address', 'The address is not a valid.').not().isEmpty().isIP(),
 			check(

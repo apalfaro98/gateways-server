@@ -1,5 +1,4 @@
-const { response, request } = require('express');
-const { validationResult } = require('express-validator');
+const Gateway = require('../models/gateway.model');
 
 const validatePeripherals = (peripherals) => {
 	peripherals.forEach((peripheral) => {
@@ -13,14 +12,15 @@ const validatePeripherals = (peripherals) => {
 	return true;
 };
 
-const validateFields = (req = request, res = response, next) => {
-	const errors = validationResult(req);
-	if (!errors.isEmpty()) return res.status(400).json(errors);
+const checkIfSerialExists = async (serial = '') => {
+	const serialExists = await Gateway.findOne({ serial });
 
-	next();
+	if (serialExists) {
+		throw new Error('The serial number already exists in the database');
+	}
 };
 
 module.exports = {
-	validateFields,
 	validatePeripherals,
+	checkIfSerialExists,
 };
