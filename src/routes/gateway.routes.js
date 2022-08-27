@@ -5,11 +5,20 @@ const { validateFields } = require('../middlewares/validate-fields.middleware');
 const {
 	validatePeripherals,
 	checkIfSerialExists,
+	checkIfGatewayExists,
 } = require('../helpers/validators');
 
 router
 	.get('/', gatewayController.getAll)
-	.get('/:gatewayID', gatewayController.getOne)
+	.get(
+		'/:gatewayID',
+		[
+			check('gatewayID', 'The ID is not valid').isMongoId(),
+			check('gatewayID').custom(checkIfGatewayExists),
+			validateFields,
+		],
+		gatewayController.getOne
+	)
 	.post(
 		'/',
 		[

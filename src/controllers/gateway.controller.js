@@ -11,10 +11,14 @@ const gatewayController = {
 		]);
 		res.json(gateways);
 	},
-	getOne: (req = request, res = response) => {
-		res.json({
-			msg: 'One gateway',
-		});
+	getOne: async (req = request, res = response) => {
+		const { gatewayID } = req.params;
+		const gateway = await Gateway.findById(gatewayID).populate('peripherals', [
+			'vendor',
+			'created',
+			'status',
+		]);
+		res.json(gateway);
 	},
 	create: async (req = request, res = response) => {
 		const { serial, name, address } = req.body;

@@ -20,7 +20,16 @@ const checkIfSerialExists = async (serial = '') => {
 	}
 };
 
+const checkIfGatewayExists = async (id = '') => {
+	const gatewayExists = await Gateway.findById(id);
+
+	if (!gatewayExists) {
+		throw new Error(`The gateway with the id ${id} does not exists`);
+	}
+};
+
 module.exports = {
 	validatePeripherals,
 	checkIfSerialExists,
+	checkIfGatewayExists,
 };
