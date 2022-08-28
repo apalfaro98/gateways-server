@@ -47,10 +47,25 @@ const gatewayController = {
 
 		res.status(201).json(gateway);
 	},
-	addPeripheral: (req = request, res = response) => {
-		res.json({
-			msg: 'Add Peripheral',
+	addPeripheral: async (req = request, res = response) => {
+		const { gatewayID } = req.params;
+		const { vendor, status } = req.body;
+		const { peripherals } = await Gateway.findById(gatewayID);
+		const peripheral = new Peripheral({
+			vendor,
+			created: Date.now(),
+			status,
 		});
+
+		await peripheral.save();
+
+		const gateway = await Gateway.findByIdAndUpdate(
+			gatewayID,
+			{ peripherals: [...peripherals, peripheral._id] },
+			{ new: true }
+		);
+
+		res.json(gateway);
 	},
 	deletePeripheral: (req = request, res = response) => {
 		res.json({

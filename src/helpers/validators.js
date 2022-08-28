@@ -1,13 +1,23 @@
 const Gateway = require('../models/gateway.model');
 
+const validateVendor = (vendor) => {
+	if (!vendor) {
+		throw new Error('The vendor is required for each peripheral.');
+	}
+	return true;
+};
+
+const validateStatus = (status) => {
+	if (!['online', 'offline'].includes(status)) {
+		throw new Error('The status must be online or offline.');
+	}
+	return true;
+};
+
 const validatePeripherals = (peripherals) => {
 	peripherals.forEach((peripheral) => {
-		if (!peripheral.vendor) {
-			throw new Error('The vendor is required for each peripheral.');
-		}
-		if (!['online', 'offline'].includes(peripheral.status)) {
-			throw new Error('The status must be online or offline.');
-		}
+		validateVendor(peripheral.vendor);
+		validateStatus(peripheral.status);
 	});
 	return true;
 };
@@ -28,8 +38,18 @@ const checkIfGatewayExists = async (id = '') => {
 	}
 };
 
+const checkIfCanAddPeripheral = async (id) => {
+	const gateway = await Gateway.findById(id);
+	if (gateway.peripherals.length === 10) {
+		throw new Error('This gateway already has 10 peripherals.');
+	}
+};
+
 module.exports = {
 	validatePeripherals,
 	checkIfSerialExists,
 	checkIfGatewayExists,
+	checkIfCanAddPeripheral,
+	validateVendor,
+	validateStatus,
 };

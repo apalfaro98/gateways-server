@@ -4,8 +4,11 @@ const gatewayController = require('../controllers/gateway.controller');
 const { validateFields } = require('../middlewares/validate-fields.middleware');
 const {
 	validatePeripherals,
+	validateVendor,
+	validateStatus,
 	checkIfSerialExists,
 	checkIfGatewayExists,
+	checkIfCanAddPeripheral,
 } = require('../helpers/validators');
 
 router
@@ -35,9 +38,26 @@ router
 		],
 		gatewayController.create
 	)
-	.post('/:gatewayID/peripherals', gatewayController.addPeripheral)
+	.post(
+		'/:gatewayID/peripherals',
+		[
+			check('gatewayID', 'The ID is not valid').isMongoId(),
+			check('gatewayID').custom(checkIfGatewayExists),
+			check('gatewayID').custom(checkIfCanAddPeripheral),
+			check('vendor').custom(validateVendor),
+			check('status').custom(validateStatus),
+			validateFields,
+		],
+		gatewayController.addPeripheral
+	)
 	.delete(
 		'/:gatewayID/peripherals/:peripheralID',
+		[
+			check('gatewayID', 'The gateway ID is not valid').isMongoId(),
+			check('gatewayID').custom(checkIfGatewayExists),
+			check('peripheralID', 'The peripheral ID is not valid').isMongoId(),
+			validateFields,
+		],
 
 		gatewayController.deletePeripheral
 	);
