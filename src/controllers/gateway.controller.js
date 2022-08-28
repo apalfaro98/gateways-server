@@ -65,12 +65,23 @@ const gatewayController = {
 			{ new: true }
 		);
 
-		res.json(gateway);
+		res.status(200).json(gateway);
 	},
-	deletePeripheral: (req = request, res = response) => {
-		res.json({
-			msg: 'Delete peripheral',
-		});
+	deletePeripheral: async (req = request, res = response) => {
+		const { gatewayID, peripheralID } = req.params;
+
+		await Peripheral.findByIdAndDelete(peripheralID);
+
+		let { peripherals } = await Gateway.findById(gatewayID);
+		peripherals = peripherals.filter((id) => id != peripheralID);
+
+		const gateway = await Gateway.findByIdAndUpdate(
+			gatewayID,
+			{ peripherals },
+			{ new: true }
+		);
+
+		res.status(200).json(gateway);
 	},
 };
 

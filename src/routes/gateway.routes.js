@@ -1,7 +1,10 @@
 const router = require('express').Router();
 const { check } = require('express-validator');
 const gatewayController = require('../controllers/gateway.controller');
-const { validateFields } = require('../middlewares/validate-fields.middleware');
+const {
+	checkIfPeripheralExists,
+	validateFields,
+} = require('../middlewares/validate-fields.middleware');
 const {
 	validatePeripherals,
 	validateVendor,
@@ -57,6 +60,7 @@ router
 			check('gatewayID').custom(checkIfGatewayExists),
 			check('peripheralID', 'The peripheral ID is not valid').isMongoId(),
 			validateFields,
+			checkIfPeripheralExists,
 		],
 
 		gatewayController.deletePeripheral
