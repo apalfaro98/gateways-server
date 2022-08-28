@@ -41,7 +41,7 @@ router
 		],
 		gatewayController.create
 	)
-	.post(
+	.put(
 		'/:gatewayID/peripherals',
 		[
 			check('gatewayID', 'The ID is not valid').isMongoId(),
