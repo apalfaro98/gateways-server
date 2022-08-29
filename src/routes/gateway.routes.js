@@ -28,10 +28,11 @@ router
 	.post(
 		'/',
 		[
-			check('serial', 'The serial number is required').not().isEmpty(),
+			check('serial', 'The serial number is required.').not().isEmpty(),
 			check('serial').custom(checkIfSerialExists),
-			check('name', 'The name is required').not().isEmpty(),
-			check('address', 'The address is not a valid.').not().isEmpty().isIP(),
+			check('name', 'The name is required.').not().isEmpty(),
+			check('address', 'The address is required.').not().isEmpty(),
+			check('address', 'The address is not valid.').isIP(),
 			check(
 				'peripherals',
 				'A gateway cannot have more than 10 peripherals.'
